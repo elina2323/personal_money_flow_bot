@@ -133,7 +133,7 @@ public class PersonalMoneyFlowBot extends TelegramLongPollingBot {
                         .append("Budget + {amount} to top up balance\n")
                         .append("Expenses get total expenses\n")
                         .append("Add expense format [item]-[price]\n")
-                        .append("Delete last- to remove last added expense");
+                        .append("Delete last - to remove last added expense");
             }
             }
         messageForUser.setChatId(String.valueOf(chatId));

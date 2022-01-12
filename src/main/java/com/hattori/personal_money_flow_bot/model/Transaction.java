@@ -38,6 +38,7 @@ public class Transaction {
     @UpdateTimestamp
     LocalDateTime editDate;
 
+    @UpdateTimestamp
     LocalDateTime endDate;
 
 

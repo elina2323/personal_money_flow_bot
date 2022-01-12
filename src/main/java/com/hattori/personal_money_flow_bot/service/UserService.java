@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void saveUser(User user);
+    User saveUser(User user);
     void deleteUser(Long chatId);
     List<User> getAllUsers();
     User getUser(long chatId);

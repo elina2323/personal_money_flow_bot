@@ -26,6 +26,7 @@ public class User {
     @Column(name = "name")
     String name;
 
+
     @Column(name = "balance_amount")
     Long balanceAmount;
 

@@ -12,6 +12,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,7 +60,8 @@ public class PersonalMoneyFlowBot extends TelegramLongPollingBot {
                     .append("Budget + {amount} to top up balance\n")
                     .append("Expenses to get total expenses\n")
                     .append("Add expense format [item]-[price]\n")
-                    .append("Delete last- to remove last added expense");
+                    .append("Delete last- to remove last added expense\n")
+                    .append("Clear all - to remove all actions");
         }else {
             String command=update.getMessage().getText().trim();
 
@@ -94,7 +96,7 @@ public class PersonalMoneyFlowBot extends TelegramLongPollingBot {
                                     .append(totalExpense);
                         }
                     }
-                }else if (command.matches("^\\w+\\s\\-\\s\\d+")) {
+                }else if (command.matches("^\\w+\\s-\\s\\d+")) {
                 Transaction transaction = new Transaction();
                 int nameIndex = command.indexOf("-");
                 String name = command.substring(0, nameIndex - 1);
@@ -127,13 +129,26 @@ public class PersonalMoneyFlowBot extends TelegramLongPollingBot {
                             .append(transaction.getTransactionName())
                             .append("," + transaction.getExpense());
                 }
-            }else {
+
+            }else if (command.equalsIgnoreCase("Clear all")){
+                boolean existExpenses = transactionService.existUserExpenses(user);
+                if (!existExpenses){
+                    stringBuilder.append("Not exist expenses");
+                }else {
+                    transactionService.deleteAllTransactions(user);
+                    stringBuilder.append("Expenses cleared");
+                    user.setBalanceAmount(0L);
+                    userService.saveUser(user);
+                }
+            }
+            else {
                 stringBuilder.append("Write commands below\n")
                         .append("Budget to get balance\n")
                         .append("Budget + {amount} to top up balance\n")
                         .append("Expenses get total expenses\n")
                         .append("Add expense format [item]-[price]\n")
-                        .append("Delete last - to remove last added expense");
+                        .append("Delete last - to remove last added expense\n")
+                        .append("Clear all - to remove all actions");
             }
             }
         messageForUser.setChatId(String.valueOf(chatId));

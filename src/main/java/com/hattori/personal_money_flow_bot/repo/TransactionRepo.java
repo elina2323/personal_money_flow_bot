@@ -14,4 +14,7 @@ public interface TransactionRepo extends JpaRepository<Transaction,Long> {
     List<Transaction> findByUserAndEndDateIsNull(User user);
 
     Transaction findTopByUserAndEndDateIsNullOrderByIdDesc(User user);
+
+    void deleteAllByUser(User user);
+    boolean existsByUser(User user);
 }

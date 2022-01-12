@@ -10,4 +10,6 @@ public interface TransactionService {
     Transaction getLastTransaction(User user);
 
     Transaction save(Transaction transaction);
+    void deleteAllTransactions(User user);
+    boolean existUserExpenses(User user);
 }

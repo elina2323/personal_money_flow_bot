@@ -6,13 +6,14 @@ import com.hattori.personal_money_flow_bot.service.TransactionService;
 import com.hattori.personal_money_flow_bot.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.Objects;
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PersonalMoneyFlowBot extends TelegramLongPollingBot {
+
+    private final Logger log = LoggerFactory.getLogger(PersonalMoneyFlowBot.class);
 
     @Autowired
     private UserService userService;
@@ -72,7 +75,7 @@ public class PersonalMoneyFlowBot extends TelegramLongPollingBot {
                     command = command.replaceAll("[^\\d.]", "");
                     Long topUp = Long.parseLong(command);
                     if (topUp < 1) {
-                        stringBuilder.append("Top up balance greater than 1");
+                        stringBuilder.append("Add balance greater than 1");
                     } else {
                         Long userBalance = user.getBalanceAmount();
                         user.setBalanceAmount(userBalance + topUp);
